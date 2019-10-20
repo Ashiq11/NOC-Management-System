@@ -1,0 +1,352 @@
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+         <div class="box box-success">
+             <div class="box-header with-border">
+               <h3 class="box-title">Annual Requirement Submission</h3>
+               <button type="button" class="btn btn-sm btn-embossed btn-success btn-add-product" style="float: right; margin-left: 7px;" (click)="searchAnnualRequirements()"><i class="fa fa-search"></i> Search</button>
+               <button type="button" class="btn btn-sm btn-embossed btn-primary btn-add-product" style="float: right;" (click)="saveAnnualRequirement()"><i class="fa fa-save"></i> Save</button>
+             </div>
+             <div class="box-body">
+              <div class="row" style="margin-bottom:5px ;">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-sm btn-embossed btn-success btn-add-product" (click)="openRequireModal('add')">
+                      <i class="fa fa-plus"></i> Add Product</button>
+                </div>
+              </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive" style="border: 1px solid #bed2c9">
+                  <table class="table table-bordered table-hover table-striped">
+                    <thead style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));">
+                      <tr>
+                        <th scope="col" style="width: 10%">Product Name</th>
+                        <th scope="col" style="width: 6%">Product Type</th>
+                        <th scope="col" style="width: 7%">H.S. Code</th>
+                        <th scope="col" style="width: 7%">Manufacturer</th>
+                        <th scope="col" style="width: 7%">Country Origin</th>
+                        <th scope="col" style="width: 6%">Pack Size</th>
+                        <th scope="col" style="width: 7%">Tentative Units</th>
+                        <th scope="col" style="width: 7%">Total Amount(Tons)</th>
+                        <th scope="col" style="width: 6%">Unit Price</th>
+                        <th scope="col" style="width: 5%">Currency</th>
+                        <th scope="col" style="width: 5%">Rate(Bdt)</th>
+                        <th scope="col" style="width: 7%">Total Price</th>
+                        <th scope="col" style="width: 7%">Total Price(Bdt)</th>
+                        <th scope="col" style="width: 13%">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let a of annualRequirements | paginate: { itemsPerPage:5, currentPage: p}">
+                        <td>{{a.prodName}}</td>
+                        <td>{{a.prodType}}</td>
+                        <td>{{a.hsCode}}</td>
+                        <td>{{a.manufacturer}}</td>
+                        <td>{{a.countryOfOrigin}}</td>
+                        <td>{{a.packSize}}</td>
+                        <td>{{a.tentativeUnits}}</td>
+                        <td>{{a.totalAmount}}</td>
+                        <td>{{a.unitPrice}}</td>
+                        <td>{{a.currency}}</td>
+                        <td>{{a.exchangeRate}}</td>
+                        <td>{{a.totalPrice}}</td>
+                        <td>{{a.totalPriceInBdt}}</td>
+                        <td>
+                          <span style="display: inline;">
+                            <button  class="btn btn-sm btn-warning" (click)="editProduct(a)">
+                              <i class="fa fa-edit"></i></button>  
+                            <button  style="margin-left:10px;"
+                            class="btn btn-sm btn-danger" (click)="removeProduct(a)"><i class="fa fa-trash"></i></button>  
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+              </div>
+            </div>
+             </div>
+             <!-- /.box-body -->
+           </div>
+      </div>
+    </div>  
+ </div>
+ <ng-template #taskmodal>
+    <div class="modal-header" style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));color: black;">
+      <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="padding: 20px 30px 20px 30px;">
+        <div class="row">
+          <div class="col-md-12">
+              <fieldset class="scheduler-border">
+                  <legend class="scheduler-border">Product Information</legend>
+                      <div class="row">
+                        <div class="col-md-12">
+                            <form [formGroup]="annualRequirementsForm" (submit)="addUpdateProduct()">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                       <div class="form-group m-form__group">
+                                           <label for="product-name" class="control-label required">Product Name</label>
+                                           <input type="text" class="form-control" id="product-name" placeholder="product"
+                                           [ngClass]="{'is-invalid': annualRequirementsForm.get('prodName').errors && annualRequirementsForm.get('prodName').touched}" 
+                                           formControlName= "prodName">
+                                           <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('prodName').hasError('required')
+                                           && annualRequirementsForm.get('prodName').touched">Product name required</div>
+                                           <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('prodName').hasError('maxlength')
+                                              && annualRequirementsForm.get('prodName').touched"> Product name can be max 50 Character long</div>                    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                          <label for="product-name" class="control-label required">Product Type</label>
+                                          <input type="text" class="form-control" id="product-name" placeholder="product type"
+                                          [ngClass]="{'is-invalid': annualRequirementsForm.get('prodType').errors && annualRequirementsForm.get('prodType').touched}" 
+                                          formControlName= "prodType">
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('prodType').hasError('required')
+                                          && annualRequirementsForm.get('prodType').touched">Product type required</div>
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('prodType').hasError('maxlength')
+                                             && annualRequirementsForm.get('prodType').touched"> Product type can be max 500 Character long</div>                    
+                                       </div>
+                                   </div>
+                                   <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="product-name" class="control-label required">H.S. Code</label>
+                                        <input type="text" class="form-control" id="product-name" placeholder="h.s. code"
+                                        [ngClass]="{'is-invalid': annualRequirementsForm.get('hsCode').errors && annualRequirementsForm.get('hsCode').touched}" 
+                                        formControlName= "hsCode">
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('prodName').hasError('required')
+                                        && annualRequirementsForm.get('hsCode').touched">H.S. code required</div>
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('hsCode').hasError('maxlength')
+                                           && annualRequirementsForm.get('hsCode').touched">H.S. code can be max 50 Character long</div>                    
+                                     </div>
+                                </div>
+                                  </div>
+                                  <div class="row">
+                                 
+                                  <div class="col-md-4">
+                                      <div class="form-group">
+                                          <label for="product-name" class="control-label required">Manufacturer</label>
+                                          <input type="text" class="form-control" id="manufacturer" placeholder="manufacturer"
+                                          [ngClass]="{'is-invalid': annualRequirementsForm.get('manufacturer').errors && annualRequirementsForm.get('manufacturer').touched}" 
+                                          formControlName= "manufacturer">
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('manufacturer').hasError('required')
+                                          && annualRequirementsForm.get('manufacturer').touched">Manufacturer name required</div>
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('manufacturer').hasError('maxlength')
+                                             && annualRequirementsForm.get('manufacturer').touched"> Manufacturer name can be max 100 Character long</div>                    
+                                       </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="product-name" class="control-label required">Country of Origin</label>
+                                        <input type="text" class="form-control" id="manufacturer" placeholder="country of origin"
+                                        [ngClass]="{'is-invalid': annualRequirementsForm.get('countryOfOrigin').errors && annualRequirementsForm.get('countryOfOrigin').touched}" 
+                                        formControlName= "countryOfOrigin">
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('countryOfOrigin').hasError('required')
+                                        && annualRequirementsForm.get('countryOfOrigin').touched">Country of Origin required</div>
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('manufacturer').hasError('maxlength')
+                                           && annualRequirementsForm.get('countryOfOrigin').touched">Country of Origin can be max 100 Character long</div>                    
+                                     </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                      <label for="product-name" class="control-label required">Pack Size</label>
+                                      <input type="text" class="form-control" id="manufacturer" placeholder="pack size"
+                                      [ngClass]="{'is-invalid': annualRequirementsForm.get('packSize').errors && annualRequirementsForm.get('packSize').touched}" 
+                                      formControlName= "packSize">
+                                      <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('packSize').hasError('required')
+                                      && annualRequirementsForm.get('packSize').touched">Pack size required</div>
+                                      <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('packSize').hasError('maxlength')
+                                         && annualRequirementsForm.get('packSize').touched">Pack size can be max 100 Character long</div>                    
+                                   </div>
+                              </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="product-name" class="control-label required">Tentative Units</label><br>
+                                            <small style="color:red;">* numeric value</small>
+                                            <input type="text" class="form-control" id="manufacturer" placeholder="tentative units" autocomplete="off"
+                                            [ngClass]="{'is-invalid': annualRequirementsForm.get('tentativeUnits').errors && annualRequirementsForm.get('tentativeUnits').touched}" 
+                                            formControlName= "tentativeUnits" (keydown)="resetCurrency()">
+                                            <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('tentativeUnits').hasError('required')
+                                            && annualRequirementsForm.get('tentativeUnits').touched">Tentative units required</div>
+                                            <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('tentativeUnits').hasError('maxlength')
+                                               && annualRequirementsForm.get('tentativeUnits').touched">Tentative units can be max 8 Character long</div>
+                                               <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('tentativeUnits').hasError('pattern')
+                                                && annualRequirementsForm.get('tentativeUnits').touched">Invalid format</div>                   
+                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                          <label for="total-quantity" class="control-label required">Total Amount (in Tons)</label><br>
+                                           <small style="color:red;">* numeric value</small>
+                                          <input type="text" class="form-control" id="total-quantity" placeholder="total amount"  autocomplete="off"
+                                          [ngClass]="{'is-invalid': annualRequirementsForm.get('totalAmount').errors && annualRequirementsForm.get('totalAmount').touched}" 
+                                          formControlName= "totalAmount">
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('totalAmount').hasError('required')
+                                          && annualRequirementsForm.get('totalAmount').touched">Total Amount required</div>
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('totalAmount').hasError('maxlength')
+                                             && annualRequirementsForm.get('totalAmount').touched">Total Amount can be max 6 Character long</div>
+                                          <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('totalAmount').hasError('pattern')
+                                          && annualRequirementsForm.get('totalAmount').touched">Invalid format</div>                   
+                                       </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="unit-price" class="control-label required">Unit Price in foreign Currency</label><br>
+                                        <small style="color:red;">* numeric value</small>
+                                        <input type="text" class="form-control" id="unit-price" placeholder="unit price"  autocomplete="off"
+                                        [ngClass]="{'is-invalid': annualRequirementsForm.get('unitPrice').errors && annualRequirementsForm.get('unitPrice').touched}" 
+                                        formControlName= "unitPrice" (keydown)="resetCurrency()">
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('unitPrice').hasError('required') &&
+                                        annualRequirementsForm.get('unitPrice').touched">Unit Price required</div>
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('unitPrice').hasError('maxlength') &&
+                                        annualRequirementsForm.get('unitPrice').touched">Unit Price can be max 20 Character long</div>
+                                        <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('unitPrice').hasError('pattern')
+                                        && annualRequirementsForm.get('unitPrice').touched">Invalid format</div>                   
+                                     </div>
+                                </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <div class="form-group">
+                                              <label for="currency">Select Currency</label>
+                                              <select id="currency" class="form-control" formControlName="currency" (change)="onCUrrencyChange()"
+                                              [ngClass]="{'is-invalid': annualRequirementsForm.get('currency').errors && annualRequirementsForm.get('currency').touched}">
+                                                <option value="" selected>select</option>
+                                                 <option *ngFor="let u of currencies" [value]="u.currency">{{u.currency}}</option>
+                                              </select>
+                                           <div class="invalid-feedback" *ngIf="annualRequirementsForm.get('currency').hasError('required')
+                                           && annualRequirementsForm.get('currency').touched">Currency required</div>
+                                          </div>
+                                      </div>
+                                    
+                                      <div class="col-md-4">
+                                            <div class="form-group">
+                                              <label for="exchange-rate" class="control-label required">Exchange Rate in BDT</label>
+                                              <input type="number" class="form-control" id="exchange-rate" placeholder="exchange rate"
+                                              formControlName= "exchangeRate" readonly>               
+                                           </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="form-group">
+                                          <label for="total-price" class="control-label required">Total Price in Foreign Currency</label>
+                                          <input type="number" class="form-control" id="total-price" placeholder="total price in bdt tk"
+                                          formControlName= "totalPrice" readonly>               
+                                       </div>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                     
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label for="total-price" class="control-label required">Total Price in BDT(Tk)</label>
+                                      <input type="number" class="form-control" id="total-price" placeholder="total price in bdt tk"
+                                      formControlName= "totalPriceInBdt" readonly>               
+                                   </div>
+                                  </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-md-7"> 
+                                         
+                                      </div>
+                                      <div class="col-md-5">
+                                        
+                                      <button type="submit" *ngIf="addMode" class="btn btn-success btn-md" style="width: 100px;"
+                                      [disabled]="!annualRequirementsForm.valid">Add</button>
+                                      <button type="submit" *ngIf="editMode" class="btn btn-success btn-md" style="width: 100px;"
+                                      [disabled]="!annualRequirementsForm.valid">Update</button>
+                                      <button type="button" class="btn btn-danger btn-md" (click)="modalRef.hide()" 
+                                      style="margin-right:20px;width: 100px; ">Cancel</button>
+                                    </div>
+                                   </div>
+                              </form>
+                        </div>
+                      </div>
+              </fieldset>
+          </div>
+        </div>
+     </div>
+  </ng-template>
+  <ng-template #annualReqsModal>
+      <div class="modal-header" style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));color: black;">
+        <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 20px 30px 20px 30px;">
+          <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive" style="border: 1px solid #bed2c9; width: 100%;">
+                <table class="table-bordered table-responsive table-hover table-striped">
+                    <thead style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));">
+                        <tr>
+                          <th scope="col" style="width: 5%">Id</th>
+                          <th scope="col" style="width: 7%;display: none;">Importer</th>
+                          <th scope="col" style="width: 10%">Submission Date</th>
+                          <th scope="col" style="width: 20%;">Products</th>
+                          <th scope="col" style="width: 10%;">Countries</th>
+                          <th scope="col" style="width: 25%;">Manufactures</th>
+                          <th scope="col" style="width: 5%;">Currencies</th>
+                          <th scope="col" style="width: 8%;">Total Amounts</th>
+                          <th scope="col" style="width: 10%; display: none;">Total Prices</th>
+                          <th scope="col" style="width: 10%;">Total Price(BDT)</th>
+                          <th scope="col" style="width: 7%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let a of annReqs">
+                        <td>{{a.id}}</td>
+                        <td style="display: none;">{{a.importerId}}</td>
+                        <td>{{a.submissionDate| date}}</td>
+                        <td>
+                          <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                            <li>{{d.prodName}}</li>
+                          </ul>
+                        </td>
+                        <td>
+                            <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                              <li>{{d.countryOfOrigin}}</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                              <li>{{d.manufacturer}}</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                              <li>{{d.currency}}</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                              <li>{{d.totalAmount}} T</li>
+                            </ul>
+                        </td>
+                        <td style="display: none;">
+                            <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                              <li>{{d.totalPrice}}</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul type="none" *ngFor="let d of a.annualRequirementDtls">
+                              <li>{{d.totalPriceInBdt}}</li>
+                            </ul>
+                        </td>
+                        <td> <button  class="btn btn-sm btn-success btn-grid-pdf"><i class="fas fa-check icon-pdf"></i></button> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+            </div>
+       </div>
+    </ng-template>
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '0',fullScreenBackdrop:true }"></ngx-loading>

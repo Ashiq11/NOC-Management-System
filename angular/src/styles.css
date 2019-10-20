@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+@import url(assets/bower_components/bootstrap/dist/css/bootstrap.min.css);
+@import url(assets/bower_components/font-awesome/css/font-awesome.min.css);
+@import url(assets/bower_components/Ionicons/css/ionicons.min.css);
+@import url(assets/bower_components/jvectormap/jquery-jvectormap.css);
+@import url(assets/dist/css/AdminLTE.min.css);
+@import url(assets/dist/css/skins/_all-skins.min.css);
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic');
+@import '../node_modules/alertifyjs/build/css/alertify.min.css';
+@import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
+
+.invalid-feedback{
+    color: red !important;
+    font-size: smaller !important;
+}
+.btn-success {
+    text-shadow: 0 1px 0 rgba(0,0,0,.2) !important;
+    background-color: #00a65a !important;
+    border-color: #57a957 !important;
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0)) !important;
+}
+.btn-danger {
+    text-shadow: 0 1px 0 rgba(0,0,0,.2) !important;
+    background-color: #ca3535 !important;
+    border-color: #c43c35 !important;
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0)) !important;
+}
+.btn-primary {
+    text-shadow: 0 1px 0 rgba(0,0,0,.2) !important;
+    background-color: #1189d7 !important;
+    border-color: #269CE9 !important;
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0)) !important;
+}
+.btn-info {
+    text-shadow: 0 1px 0 rgba(0,0,0,.2) !important;
+    background-color: #00c0ef !important;
+    border-color: #00acd6 !important;
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0)) !important;
+}

@@ -1,0 +1,44 @@
+form{
+    width: 100%;
+    padding: 2% 5% 1% 5%;
+}
+.form-control{
+    background-image: none;
+    border: 1px solid green;
+    border-radius: 6px;
+}
+.is-invalid {
+    border: 1px solid red !important;
+}
+.invalid-feedback{
+    font-weight: 600;
+}
+.btn-registration-disabled{
+    cursor: no-drop;
+    color: #000 !important;
+    font-weight: 700;
+}
+.btn-register{
+    font-size: 15px !important;
+    font-weight: 700;
+}
+fieldset.scheduler-border {
+    border: 1px groove #45A845 !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 15px 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+
+    legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+        margin-bottom: 0;
+    }
+.navbar{
+    border: none;
+}

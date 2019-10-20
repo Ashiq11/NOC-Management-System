@@ -1,0 +1,424 @@
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">Proforma invoice Submission</h3>
+          <button type="button" class="btn btn-sm btn-success btn-embossed btn-add-product" style="float: right;"  (click)="getAllProformaInvoiceMstByUser()"><i class="fa fa-search" style="color: white;"></i>Search</button>
+          <button type="button" class="btn btn-sm btn-info btn-embossed btn-add-product" style="float: right; margin-right: 5px;" (click)="submitProformaInvoice()" [disabled]="submitButtonDisable"><i class="fa fa-save"></i> Submit</button>
+          <button type="button" class="btn btn-sm btn-primary btn-embossed btn-add-product" style="float: right;" (click)="saveUpdatePormaInvoice()" [disabled]="!proformaInvoiceForm.valid || updateBtnDisable"><i class="fa fa-save"></i> {{saveButtonTitle}}</button>
+          <button type="button" class="btn btn-sm btn-embossed btn-danger btn-add-product" style="float: right;" (click)="resetPage()"><i class="fa fa-refresh" style="color: white;"></i>Reset</button>
+        </div>
+        <div class="box-body">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Proforma Information</legend>
+          <div class="row">
+            <div class="col-md-12">
+              <form [formGroup]="proformaInvoiceForm">
+                <div class="row">
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label for="application-no" class="control-label required">Application No:</label>
+                          <input type="text" class="form-control" id="application-no" placeholder="auto generated"
+                          formControlName= "applicationNo" readonly>         
+                       </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label for="proforma-invoice-no" class="control-label required">Proforma Invoice No:</label>
+                          <input type="text" class="form-control" id="proforma-invoice-no" placeholder="auto generated"
+                          formControlName= "proformaInvoiceNo" readonly>         
+                       </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label for="proforma-date" class="control-label required">Proforma Date:</label>
+                          <input type="text" class="form-control" id="proforma-date" placeholder="auto generated"
+                          formControlName= "proformaDate" readonly>         
+                       </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label for="submission-date" class="control-label required">Submission Date:</label>
+                          <input type="text" class="form-control" id="submission-date" placeholder="auto generated"
+                          formControlName= "submissionDate" readonly>         
+                       </div>
+                  </div>
+                </div>
+                <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="product-name" class="control-label required">Country of Origin:</label>
+                              <input type="text" class="form-control" id="manufacturer" placeholder="country of origin"
+                              [ngClass]="{'is-invalid': proformaInvoiceForm.get('countryOfOrigin').errors && proformaInvoiceForm.get('countryOfOrigin').touched}" 
+                              formControlName= "countryOfOrigin">
+                              <div class="invalid-feedback" *ngIf="proformaInvoiceForm.get('countryOfOrigin').hasError('required')
+                              && proformaInvoiceForm.get('countryOfOrigin').touched">Country of Origin required</div>                  
+                           </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="currency">Select Currency:</label>
+                              <select id="currency" class="form-control" formControlName="currency" (change)="currencySelectChange()"
+                              [ngClass]="{'is-invalid': proformaInvoiceForm.get('currency').errors && proformaInvoiceForm.get('currency').touched}">
+                                <option value="" selected>select</option>
+                                 <option *ngFor="let u of currencies" [value]="u.currency">{{u.currency}}</option>
+                              </select>
+                           <div class="invalid-feedback" *ngIf="proformaInvoiceForm.get('currency').hasError('required')
+                           && proformaInvoiceForm.get('currency').touched">Currency required</div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="port-of-loading" class="control-label required">Port of Loading:</label>
+                              <input type="text" class="form-control" id="port-of-loading" placeholder="port of loading"
+                              [ngClass]="{'is-invalid': proformaInvoiceForm.get('portOfLoading').errors && proformaInvoiceForm.get('portOfLoading').touched}"
+                              formControlName= "portOfLoading">         
+                           </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="port-of-entry" class="control-label required">Port of Entry:</label>
+                              <input type="text" class="form-control" id="port-of-entry" placeholder="port of entry"
+                              [ngClass]="{'is-invalid': proformaInvoiceForm.get('portOfEntry').errors && proformaInvoiceForm.get('portOfEntry').touched}"
+                              formControlName= "portOfEntry">         
+                           </div>
+                      </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="irc-license-scan-copy">Scan Copy of PI:</label>
+                             <input type="file" class="form-control" id="irc-license-scan-copy"
+                            [ngClass]="{'is-invalid': proformaInvoiceForm.get('piScan').errors && proformaInvoiceForm.get('piScan').touched}" 
+                            (change)="onSelectedPiFile($event)" formControlName= "piScan">
+                           <div class="invalid-feedback" *ngIf="proformaInvoiceForm.get('piScan').hasError('required')
+                           && proformaInvoiceForm.get('piScan').touched">PI Scan Copy required</div>
+                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="lit-scan-copy">Scan Copy of Lit/Brochure:</label>
+                             <input type="file" class="form-control" id="lit-scan-copy"
+                            [ngClass]="{'is-invalid': proformaInvoiceForm.get('litScan').errors && proformaInvoiceForm.get('litScan').touched}" 
+                            (change)="onSelectedLitFile($event)" formControlName= "litScan">
+                           <div class="invalid-feedback" *ngIf="proformaInvoiceForm.get('litScan').hasError('required')
+                           && proformaInvoiceForm.get('litScan').touched">Literature Scan required</div>
+                         </div>
+                    </div><div class="col-md-3">
+                        <div class="form-group">
+                            <label for="irc-license-scan-copy">Test Report:</label>
+                             <input type="file" class="form-control" id="irc-license-scan-copy"
+                            [ngClass]="{'is-invalid': proformaInvoiceForm.get('testReport').errors && proformaInvoiceForm.get('testReport').touched}" 
+                            (change)="onSelectedTestFile($event)" formControlName= "testReport">
+                           <div class="invalid-feedback" *ngIf="proformaInvoiceForm.get('testReport').hasError('required')
+                           && proformaInvoiceForm.get('testReport').touched">Test Report required</div>
+                         </div>
+                    </div><div class="col-md-3">
+                        <div class="form-group">
+                            <label for="other-doc">Other Document:</label>
+                             <input type="file" class="form-control" id="other-doc"
+                            [ngClass]="{'is-invalid': proformaInvoiceForm.get('otherDoc').errors && proformaInvoiceForm.get('otherDoc').touched}" 
+                            (change)="onSelectedOtherDocFile($event)" formControlName= "otherDoc">
+                           <div class="invalid-feedback" *ngIf="proformaInvoiceForm.get('otherDoc').hasError('required')
+                           && proformaInvoiceForm.get('otherDoc').touched">Other Doc required</div>
+                         </div>
+                    </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+       <div class="box" style="border-top: white;">
+           <div class="box-body">
+         <div style="margin: 5px;">
+           <button type="button" class="btn btn-sm btn-embossed btn-success btn-add-product" [disabled]="!proformaInvoiceForm.valid"  (click)="openProformaDtlModal('add')">
+             <i class="fa fa-plus"></i> Add Product</button>
+          </div>
+          <div class="table-responsive" style="border: 1px solid #bed2c9">
+            <table class="table table-bordered table-hover table-striped">
+              <thead style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));">
+                <tr>
+                  <th scope="col" style="width: 10%">Product Name</th>
+                  <th scope="col" style="width: 6%">Product Type</th>
+                  <th scope="col" style="width: 7%">H.S. Code</th>
+                  <th scope="col" style="width: 7%">Manufacturer</th>
+                  <th scope="col" style="width: 6%">Pack Size</th>
+                  <th scope="col" style="width: 7%">No of Units</th>
+                  <th scope="col" style="width: 6%">Unit Price</th>
+                  <th scope="col" style="width: 7%">Total Amount(Tons)</th>
+                  <th scope="col" style="width: 5%">Rate(Bdt)</th>
+                  <th scope="col" style="width: 7%">Total Price</th>
+                  <th scope="col" style="width: 7%">Total Price(Bdt)</th>
+                  <th scope="col" style="width: 11%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let a of proformaInvoiceDtls">
+                  <td>{{a.prodName}}</td>
+                  <td>{{a.prodType}}</td>
+                  <td>{{a.hsCode}}</td>
+                  <td>{{a.manufacturer}}</td>
+                  <td>{{a.packSize}}</td>
+                  <td>{{a.noOfUnits}}</td>
+                  <td>{{a.unitPrice}}</td>
+                  <td>{{a.totalAmount}}</td>
+                  <td>{{a.exchangeRate}}</td>
+                  <td>{{a.totalPrice}}</td>
+                  <td>{{a.totalPriceInBdt}}</td>
+                  <td>
+                    <span style="display: inline;">
+                      <button  class="btn btn-sm btn-warning" (click)="editProduct(a)">
+                        <i class="fa fa-edit fa-sm icon-action"></i></button>  
+                      <button  style="margin-left:10px;"
+                      class="btn btn-sm fa-sm btn-danger" (click)="removeProduct(a)"><i class="fa fa-trash icon-action"></i></button>  
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+           </div>
+           <!-- /.box-body -->
+         </div>
+    </div>
+  </div>  
+</div>
+<ng-template #proformaInvDtlModal>
+  <div class="modal-header" style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));color: black;">
+    <h4 class="modal-title pull-left">{{proformaInvDtlModalTitle}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="padding: 20px 30px 20px 30px;">
+      <div class="row">
+        <div class="col-md-12">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Product Information</legend>
+                    <div class="row">
+                      <div class="col-md-12">
+                          <form [formGroup]="proformaInvoiceDtlForm" (submit)="addUpdateProduct()">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label for="product-name" class="control-label required">Select Product Name</label>
+                                         <select id="currency" class="form-control" formControlName="prodName" (change)="prodNameSelectChng()"
+                                        [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('prodName').errors && proformaInvoiceDtlForm.get('prodName').touched}" >
+                                           <option value="" selected>select</option>
+                                            <option *ngFor="let a of annProds" [value]="a.prodName">{{a.prodName}}</option>
+                                         </select>
+                                         <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('prodName').hasError('required')
+                                         && proformaInvoiceDtlForm.get('prodName').touched">Product name required</div>                  
+                                      </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="product-name" class="control-label required">Product Type</label>
+                                        <input type="text" class="form-control" id="product-name" placeholder="product type"
+                                        [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('prodType').errors && proformaInvoiceDtlForm.get('prodType').touched}" 
+                                        formControlName= "prodType" readonly>
+                                        <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('prodType').hasError('required')
+                                        && proformaInvoiceDtlForm.get('prodType').touched">Product type required</div>
+                                        <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('prodType').hasError('maxlength')
+                                           && proformaInvoiceDtlForm.get('prodType').touched"> Product type can be max 500 Character long</div>                    
+                                     </div>
+                                 </div>
+                              
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="product-name" class="control-label required">H.S. Code</label>
+                                        <input type="text" class="form-control" id="product-name" placeholder="h.s. code"
+                                        [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('hsCode').errors && proformaInvoiceDtlForm.get('hsCode').touched}" 
+                                        formControlName= "hsCode" readonly>
+                                        <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('prodName').hasError('required')
+                                        && proformaInvoiceDtlForm.get('hsCode').touched">H.S. code required</div>
+                                        <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('hsCode').hasError('maxlength')
+                                           && proformaInvoiceDtlForm.get('hsCode').touched">H.S. code can be max 50 Character long</div>                    
+                                     </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="product-name" class="control-label required">Manufacturer</label>
+                                        <input type="text" class="form-control" id="manufacturer" placeholder="manufacturer"
+                                        [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('manufacturer').errors && proformaInvoiceDtlForm.get('manufacturer').touched}" 
+                                        formControlName= "manufacturer" readonly>
+                                        <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('manufacturer').hasError('required')
+                                        && proformaInvoiceDtlForm.get('manufacturer').touched">Manufacturer name required</div>
+                                        <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('manufacturer').hasError('maxlength')
+                                           && proformaInvoiceDtlForm.get('manufacturer').touched"> Manufacturer name can be max 100 Character long</div>                    
+                                     </div>
+                                </div>
+                                
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="product-name" class="control-label required">Pack Size</label>
+                                    <input type="text" class="form-control" id="manufacturer" placeholder="pack size"
+                                    [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('packSize').errors && proformaInvoiceDtlForm.get('packSize').touched}" 
+                                    formControlName= "packSize" readonly>
+                                    <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('packSize').hasError('required')
+                                    && proformaInvoiceDtlForm.get('packSize').touched">Pack size required</div>
+                                    <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('packSize').hasError('maxlength')
+                                       && proformaInvoiceDtlForm.get('packSize').touched">Pack size can be max 100 Character long</div>                    
+                                 </div>
+                                </div>
+                          </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="product-name" class="control-label required">No of Unit</label><br>
+                                    <small style="color:red;">* numeric value</small>
+                                    <input type="number" class="form-control" id="manufacturer" placeholder="tentative units" autocomplete="off"
+                                    [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('noOfUnits').errors && proformaInvoiceDtlForm.get('noOfUnits').touched}" 
+                                    (keyup)="calculateTotalPrice()" formControlName= "noOfUnits">
+                                    <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('noOfUnits').hasError('required')
+                                    && proformaInvoiceDtlForm.get('noOfUnits').touched">No of units required</div>
+                                    <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('noOfUnits').hasError('maxlength')
+                                       && proformaInvoiceDtlForm.get('noOfUnits').touched">No of units can be max 8 Character long</div>
+                                       <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('noOfUnits').hasError('pattern')
+                                       && proformaInvoiceDtlForm.get('noOfUnits').touched">Invalid format</div>                  
+                                 </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                  <label for="unit-price" class="control-label required">Unit Price in foreign Currency</label><br>
+                                    <small style="color:red;">* numeric value</small>
+                                  <input type="number" class="form-control" id="unit-price" placeholder="unit price"  autocomplete="off" (keyup)="calculateTotalPrice()"
+                                  [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('unitPrice').errors && proformaInvoiceDtlForm.get('unitPrice').touched}"
+                                  formControlName= "unitPrice">
+                                  <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('unitPrice').hasError('required') &&
+                                  proformaInvoiceDtlForm.get('unitPrice').touched">Unit Price required</div>
+                                  <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('unitPrice').hasError('maxlength') &&
+                                  proformaInvoiceDtlForm.get('unitPrice').touched">Unit Price can be max 6 Character long</div>                    
+                               </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                               <label for="total-quantity" class="control-label required">Total Amount(in Tons)</label><br>
+                               <small style="color:red;">* numeric value</small>
+                                <input type="number" class="form-control" id="total-quantity" placeholder="total amount"  autocomplete="off" (blur)="validateTotalAmtount()"
+                                [ngClass]="{'is-invalid': proformaInvoiceDtlForm.get('totalAmount').errors && proformaInvoiceDtlForm.get('totalAmount').touched}" 
+                                formControlName= "totalAmount">
+                                <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('totalAmount').hasError('required')
+                                && proformaInvoiceDtlForm.get('totalAmount').touched">Total Amount required</div>
+                                <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('totalAmount').hasError('maxlength')
+                                  && proformaInvoiceDtlForm.get('totalAmount').touched">Total Amount can be max 20 Character long</div>
+                                <div class="invalid-feedback" *ngIf="proformaInvoiceDtlForm.get('totalAmount').hasError('maxlength') &&
+                                proformaInvoiceDtlForm.get('totalAmount').touched">Unit Price can be max 8 Character long</div>     
+                                <div class="invalid-feedback" *ngIf="totalAmountValidationErrorMsg">Total amount exceeds Annual Requirements. Remaining Amount 
+                                  {{totalAmountValidation.remainingAmount}} Tons.</div>                   
+                          </div>
+                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                          <label for="exchange-rate" class="control-label required"> &nbsp;&nbsp; Exchange Rate in BDT</label>
+                                          <input type="number" class="form-control" id="exchange-rate" placeholder="exchange rate"
+                                          formControlName= "exchangeRate" readonly>               
+                                       </div>
+                                  </div>
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                        <label for="total-price" class="control-label required">Total Price in Foreign Currency</label>
+                                        <input type="number" class="form-control" id="total-price" placeholder="total price in bdt tk"
+                                        formControlName= "totalPrice" readonly>               
+                                     </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                        <label for="total-price" class="control-label required">Total Price in BDT(Tk)</label>
+                                        <input type="number" class="form-control" id="total-price" placeholder="total price in bdt tk"
+                                        formControlName= "totalPriceInBdt" readonly>               
+                                     </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7"> 
+                                      
+                                    </div>
+                                    <div class="col-md-5">
+                                      <button type="submit" *ngIf="addMode" class="btn btn-success btn-md" style="width: 100px;"
+                                      [disabled]="!proformaInvoiceDtlForm.valid">Add</button>
+                                      <button type="submit" *ngIf="editMode" class="btn btn-success btn-md" style="width: 100px;"
+                                      [disabled]="!proformaInvoiceDtlForm.valid">Update</button>
+                                      <button type="button" class="btn btn-danger btn-md" (click)="modalRef.hide()" 
+                                        style="margin-right:20px;width: 100px; ">Cancel</button>
+                                    </div>
+                                 </div>
+                            </form>
+                      </div>
+                    </div>
+            </fieldset>
+        </div>
+      </div>
+   </div>
+</ng-template>
+<ng-template #proformaInvMstSearchModal>
+  <div class="modal-header" style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));color: black;">
+    <h4 class="modal-title pull-left">Proforma Invoice Lists</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="padding: 20px 30px 20px 30px;">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive" style="border: 1px solid #bed2c9; width: 100%;">
+              <table class="table-bordered table-responsive table-hover table-striped">
+                  <thead style="background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #289e68), color-stop(1, #f9fafc));">
+                      <tr>
+                        <th scope="col" style="width: 0;display:none;">Id</th>
+                        <th scope="col" style="width: 9%">Application No</th>
+                        <th scope="col" style="width: 8%">PI No</th>
+                        <th scope="col" style="width: 10%">Proforma Date</th>
+                        <th scope="col" style="width: 10%">Submission Date</th>
+                        <th scope="col" style="width: 9%">Prot of Loding</th>
+                        <th scope="col" style="width: 9%">Port of Entry</th>
+                        <th scope="col" style="width: 10%">Confirmation</th>
+                        <th scope="col" style="width: 0; display: none;">Currency</th>
+                        <th scope="col" style="width: 7%;">PiScan</th>
+                        <th scope="col" style="width: 7%;">Liteature</th>
+                        <th scope="col" style="width: 7%;">Test Doc</th>
+                        <th scope="col" style="width: 7%;">Other Doc</th>
+                        <th scope="col" style="width: 7%">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let a of proformaInvoiceMsts | paginate: { itemsPerPage:8, currentPage: p}">
+                      <td style="display:none;">{{a.id}}</td>
+                      <td>{{a.applicationNo}}</td>
+                      <td>{{a.proformaInvoiceNo}}</td>
+                      <td>{{a.proformaDate | date}}</td>
+                      <td>{{a.submissionDate===null? "Not Submitted": a.submissionDate| date}}</td>
+                      <td>{{a.portOfLoading}}</td>
+                      <td>{{a.portOfEntry}}</td>
+                      <td>{{a.confirmation === true ? 'Submitted':'Not Submitted'}}</td>
+                      <td style="display: none;">{{a.currency}}</td>
+                      <td><button class="btn btn-sm btn-embossed btn-primary btn-grid-pdf" (click)="DownloadPiFile(a.piScan)"><i class="fas fa-file-pdf fa-lg icon-pdf"></i></button></td>
+                      <td><button class="btn btn-sm btn-embossed btn-primary btn-grid-pdf" (click)="DownloadLitFile(a.litScan)"><i class="fas fa-file-pdf fa-lg icon-pdf"></i></button></td>
+                      <td><button class="btn btn-sm btn-embossed btn-primary btn-grid-pdf" (click)="DownloadTestFile(a.testReport)"><i class="fas fa-file-pdf fa-lg icon-pdf"></i></button></td>
+                      <td><button class="btn btn-sm btn-embossed btn-primary btn-grid-pdf" (click)="DownloadOtherFile(a.otherDoc)"><i class="fas fa-file-pdf fa-lg icon-pdf"></i></button></td>
+                      <td>
+                        <button  class="btn btn-sm btn-embossed btn-success btn-grid-pdf" (click)="selectProforma(a)">
+                          <i class="fas fa-check icon-pdf"></i></button> 
+                        </td>
+                        </tr>
+                  </tbody>
+                </table>
+              </div>
+           <pagination-controls (pageChange)="p = $event"></pagination-controls>
+       </div>
+    </div>
+  </div>
+</ng-template>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '0',fullScreenBackdrop:true }"></ngx-loading>

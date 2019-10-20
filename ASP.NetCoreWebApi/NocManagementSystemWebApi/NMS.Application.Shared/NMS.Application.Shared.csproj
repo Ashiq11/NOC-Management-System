@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Dtos\AnnualRequirementDtos\" />
+    <Folder Include="Dtos\UserLoginDtos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.AspNetZeroCore" Version="1.2.4" />
+    <PackageReference Include="EPPlus" Version="4.5.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NMS.Core\NMS.Core.csproj" />
+  </ItemGroup>
+
+</Project>

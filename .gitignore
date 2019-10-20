@@ -1,0 +1,13 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# IDEs and editors
+.vs/
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+
+*.pubxml

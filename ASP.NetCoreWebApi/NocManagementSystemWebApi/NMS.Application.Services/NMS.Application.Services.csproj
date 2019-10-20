@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.AspNetZeroCore" Version="1.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NMS.Application.Shared\NMS.Application.Shared.csproj" />
+    <ProjectReference Include="..\NMS.Core\NMS.Core.csproj" />
+    <ProjectReference Include="..\NMS.EntityFrameworkCore\NMS.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+</Project>
